@@ -11,3 +11,4 @@
 # VSC Config
 /.vscode
 /data/logs
+/tokens.json
