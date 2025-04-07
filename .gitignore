@@ -11,4 +11,6 @@
 # VSC Config
 /.vscode
 /data/logs
+
+# 토큰 파일
 /tokens.json

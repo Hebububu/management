@@ -31,7 +31,6 @@ class TokenManager:
         self.base64encode_atr = self.encode_client()
         self.tokens = self.load_tokens()
 
-
     def get_auth_code(self):
         """
         최초 인증 코드를 받기 위한 함수입니다.
@@ -150,7 +149,9 @@ class TokenManager:
             return None
         
     def get_access_token(self):
-        """유효한 엑세스 토큰을 반환하거나 새로 발급받습니다."""
+        """
+        유효한 엑세스 토큰을 반환하거나 새로 발급받습니다.
+        """
         now = datetime.now()
         logger.info(f'현재 시각: {now}')
 
