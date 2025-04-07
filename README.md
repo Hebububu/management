@@ -3,7 +3,10 @@
 
 ## 프로젝트 개발 계획 (Milestone)
 
-- 추가 예정
+[Milestone]
+![Milestone](</docs/MILESTONE.png>)
+- Edit URL: https://github.com/users/Hebububu/projects/2
+
 <br/><br/>
 
 # 통합 관리 시스템 설계
