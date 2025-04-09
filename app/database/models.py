@@ -1,4 +1,4 @@
-from sqlalchemy import ForeignKey, Column, Integer, TEXT, TIMESTAMP, JSON, BOOLEAN, FLOAT, ForeignKeyConstraint
+from sqlalchemy import ForeignKey, Column, Integer, TEXT, TIMESTAMP, JSON, BOOLEAN, FLOAT, ForeignKeyConstraint, UniqueConstraint
 from sqlalchemy.orm import relationship
 from app.database.databasesetup import Base
 
@@ -20,6 +20,15 @@ class Product(Base):
     updated_at = Column(TIMESTAMP(timezone=True), nullable=False)
 
     margin = relationship('Margin', back_populates='product', uselist=False)
+
+    __table_args__ = (UniqueConstraint(
+        'platform',
+        'seller_id',
+        'company',
+        'product_name',
+        name='uq_product'
+        ),
+    )
 
 class Margin(Base):
     """

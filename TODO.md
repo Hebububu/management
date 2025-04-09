@@ -35,4 +35,6 @@ alembic base.metadata 설정
 마이그레이션 생성 및 적용
 실제 테이블 생성된거 확인하기
 
+alembic 도입 완료
+
 ```
