@@ -67,7 +67,11 @@ class Cafe24DataManager():
             start_no += limit
 
         return all_products
-            
+    
+    def sort_products_data(self):
+        """
+        DB 저장에 필요한 정보를 추출하고 객체로 만드는 메소드입니다.
+        """
 
     def insert_all_products(self):
         """

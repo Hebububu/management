@@ -15,6 +15,8 @@ class ProductCRUD:
     """
 
     def __init__(self):
+        self.db = db
+        self.logger = logger
 
     def create_product(self, product_data: dict) -> Product:
         """
@@ -36,6 +38,31 @@ class ProductCRUD:
             생성된 Product 객체 (성공 시)
             None (실패 시)
         """
+
+        session = self.db.get_session()
+        try:
+            new_product = Product(
+                platform=product_data['platform'],
+                seller_id=product_data['seller_id'],
+                product_id=product_data['product_id'],
+                company=product_data['company'],
+                sale_name=product_data['sale_name'],
+                product_name=product_data['product_name'],
+                data=product_data['data'],
+                created_at=product_data['created_at'],
+                updated_at=product_data['updated_at']
+            )
+            session.add(new_product)
+            session.commit()
+            self.logger.info(f'{product_data["product_name"]} 제품 생성 완료')
+            return new_product
+        except Exception as e:
+            self.logger.error(f'제품 생성 중 오류 발생: {e}')
+            session.rollback()
+            return None
+        finally:
+            session.close()
+
 
     def get_product_by_id(self, product_id: int) -> Product:
         """
