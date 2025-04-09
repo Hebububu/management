@@ -96,8 +96,10 @@ class Ob(Base):
     __tablename__ = 'ob'
 
     id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
-    history_id = Column(Integer, nullable=False, autoincrement=True)
+    history_id = Column(Integer, ForeignKey('ob_history.id'),nullable=False)
     created_at = Column(TIMESTAMP(timezone=True), nullable=False)
+
+    history = relationship('ObHistory', back_populates='ob')
 
 class ObHistory(Base):
     """
@@ -115,6 +117,8 @@ class ObHistory(Base):
     category = Column(TEXT, nullable=False)
     amount = Column(Integer, nullable=False)
     created_at = Column(TIMESTAMP(timezone=True), nullable=False)
+
+    ob = relationship('Ob', back_populates='history')
 
 class CrawledData(Base):
     """

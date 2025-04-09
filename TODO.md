@@ -29,6 +29,5 @@ data fetch, insert 로직까지 만들면 될듯..?
 db 정의하고 alembic init부터 하자.
 
 외부 키 참조를 ForeignKeyConstiraint로 정의함
-Ob 모델에서 one to many 인 부분 정의 다시하기. 
-
+Ob 모델에서 one to many 인 부분 정의 다시하기. (아님 이거 one to one 맞음)
 ```
