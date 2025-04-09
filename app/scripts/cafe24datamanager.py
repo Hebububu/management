@@ -3,6 +3,7 @@ from app.scripts.cafe24tokenmanager import TokenManager
 
 import requests
 import json
+import datetime
 
 # 로거 정의
 logger = mainLogger()
@@ -68,10 +69,38 @@ class Cafe24DataManager():
 
         return all_products
     
-    def sort_products_data(self):
+    def sort_products_data(self, all_products: dict, seller_id: str):
         """
         DB 저장에 필요한 정보를 추출하고 객체로 만드는 메소드입니다.
+        Args:
+            seller_id (str): 카페24 스토어명입니다.
+            all_products (dict): 제품 데이터 객체
+        returns:
+            sorted_products (list): 정렬된 제품 데이터 객체
         """
+        sorted_products = []
+        for product in all_products:
+
+            logger.info(f'제품 데이터: {product["product_name"]}')
+            product_data = {
+                'platform': 'cafe24',
+                'seller_id': seller_id,
+                'product_id': product['product_no'],
+                'company': input('회사명을 입력해주세요: '),
+                'sale_name': product['product_name'],
+                'product_name': input('관리제품명을 입력해주세요: '),
+                'data': product,
+                'created_at': datetime.datetime.utcnow(),
+                'updated_at': datetime.datetime.utcnow()
+            }
+
+            if product_data['product_name'] == '':
+                logger.info(f'관리제품명이 입력되지 않았습니다. 기존 제품명을 사용합니다.')
+                product_data['product_name'] = product['product_name']
+
+            sorted_products.append(product_data)
+
+        return sorted_products
 
     def insert_all_products(self):
         """

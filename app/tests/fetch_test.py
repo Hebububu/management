@@ -76,8 +76,11 @@ def get_all_products():
     return all_products
 
 
-# CAFE24DATAMANAGER 메소드 테스트
+# get_all_products 메소드 테스트
 all_products = cafe24.get_all_products(seller_id='richcp')
-filename = 'products_output.json'
+
+# sort_products_data 메소드 테스트
+sorted_products = cafe24.sort_products_data(all_products, seller_id='richcp')
+filename = 'sorted_products_output.json'
 with open(filename, 'w', encoding='utf-8') as json_file:
-    json.dump(all_products, json_file, indent=4, ensure_ascii=False)
+    json.dump(sorted_products, json_file, indent=4, ensure_ascii=False)
