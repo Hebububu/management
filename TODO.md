@@ -37,4 +37,5 @@ alembic base.metadata 설정
 
 alembic 도입 완료
 
+CRUD 구현 생각하기 
 ```

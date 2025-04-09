@@ -27,7 +27,7 @@
 <br/><br/>
 
 ## ERD Diagram
-![alt text](</docs/ERD2.png>)
+![alt text](</docs/ERD3.png>)
 - Edit URL: https://dbdiagram.io/d/management-67edf5b64f7afba184293fba
 
 ### 테이블 설계 상세 정의
@@ -41,28 +41,28 @@ Table product {
   platform string
   seller_id string
   product_id integer        // 플랫폼별 제품 ID
+  company string
   sale_name string          // 판매명
   product_name string [unique] // 관리제품명 (정규화된 실제 제품명)
   data json                 // 플랫폼별 원본 제품 데이터
-  created_at timestamp
-  updated_at timestamp
+  created_at datetime
+  updated_at datetime
 }
 
 Table crawled_data {
   id integer [pk, increment]
-  product_name string [ref: > product.product_name] // 관리제품명과 연계
+  product_name string // 관리제품명과 연계
   title string             // 표기 상품명 (크롤링 시 노출된 이름)
   url string               // 크롤링한 제품 URL
   price integer            // 가격
   discount_price integer   // 할인가
-  created_at timestamp
-  updated_at timestamp
+  created_at datetime
+  updated_at datetime
 }
 
 Table crawled_data_coupon {
   id integer [pk, increment]
   crawled_data_id integer [ref: > crawled_data.id] // crawled_data의 기본 정보와 연계
-  coupon_id integer
   is_available boolean
   description string
   discount_price integer
@@ -91,36 +91,47 @@ Table crawled_data_point {
 
 Table margin {
   id integer [pk, increment]
-  platform string
+  platform string // 판매 플랫폼
+  seller_id string // 판매자 ID
+  company string // 제조사
   product_name string [ref: > product.product_name] // 관리제품명과 연계
-  price integer             // 가격 (일관성을 위해 숫자형)
-  cost integer              // 원가
-  charge_percent float      // 마켓별 수수료율
-  category string
-  created_at timestamp
-  updated_at timestamp
+  price integer // 가격 (일관성을 위해 숫자형)
+  cost integer // 원가
+  marketplace_charge float // 수수료율
+  margin integer // 마진
+  margin_rate float // 마진율
+  gift integer // 사은품 가격
+  delivery_fee integer // 배송비
+  post_fee integer // 발송비
+  category string // 관리용 카테고리
+  created_at datetime
+  updated_at datetime
 }
 
 Table ob_history {
   id integer [pk, increment]
-  product_name string [ref: > product.product_name] // 관리제품명과 연계하여 출고 이력 관리
-  amount integer
+  platform string
+  seller_id string
+  product_id string
+  company string
+  product_name string // 관리제품명과 연계하여 출고 이력 관리
   price integer
-  created_at timestamp
+  category string
+  amount integer
 }
 
 Table ob {
   id integer [pk, increment]
   history_id integer [ref: > ob_history.id]
-  created_at timestamp
+  created_at datetime
 }
 
 Table user {
   id integer [pk, increment]
   name string
   email string
-  created_at timestamp
-  updated_at timestamp
+  created_at datetime
+  updated_at datetime
 }
 
 Table log {
@@ -130,13 +141,13 @@ Table log {
   source string
   message string
   ip_address string
-  created_at timestamp
+  created_at datetime
 }
 
 
-Ref: "margin"."price" < "ob_history"."price"
-
-Ref: "product"."product_name" < "log"."source"
+Ref: "product"."platform" < "margin"."platform"
+Ref: "product"."seller_id" < "margin"."seller_id"
+Ref: "product"."company" < "margin"."company"
 ```
 
 </details>
