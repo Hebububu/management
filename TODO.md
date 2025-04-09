@@ -38,4 +38,6 @@ alembic base.metadata 설정
 alembic 도입 완료
 
 CRUD 구현 생각하기 
+
+DB에 인서트할 데이터 정렬(데이터에서 필요한 정보만 추출하여 바로 INSERT 가능하게끔 정리하기..)
 ```

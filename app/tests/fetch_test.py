@@ -1,10 +1,12 @@
 from app.scripts.cafe24tokenmanager import TokenManager
 from app.utils.logger import mainLogger
+from app.scripts.cafe24datamanager import Cafe24DataManager
 import requests
 import json
 import os
 
 logger = mainLogger()
+cafe24 = Cafe24DataManager()
 
 def call_request(info='products/count'):
 
@@ -40,7 +42,7 @@ def get_all_products():
     limit = 100
 
     while True:
-        info = f'products?fields=product_no,product_code&since_product_no={since_product_no}&limit={limit}'
+        info = f'products?embed=options&since_product_no={since_product_no}&limit={limit}'
         url = f'https://richcp.cafe24api.com/api/v2/admin/{info}'
         response = requests.get(url, headers=headers)
 
@@ -69,8 +71,13 @@ def get_all_products():
     filename = 'products_output.json'
 
     with open(filename, 'w', encoding='utf-8') as json_file:
-        json.dump(all_products, json_file, indent=4)
+        json.dump(all_products, json_file, indent=4, ensure_ascii=False)
 
     return all_products
 
-get_all_products()
+
+# CAFE24DATAMANAGER 메소드 테스트
+all_products = cafe24.get_all_products(seller_id='richcp')
+filename = 'products_output.json'
+with open(filename, 'w', encoding='utf-8') as json_file:
+    json.dump(all_products, json_file, indent=4, ensure_ascii=False)
