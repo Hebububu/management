@@ -19,15 +19,33 @@ class DatabaseSetup:
         """
         데이터베이스 셋업을 초기화하는 메소드입니다.
         """
-
-        # SQLAlchemy 엔진 생성
-        if self.engine is None:
-            engine = create_engine(DatabaseConfig.get_connection_str(), connect_args={'check_same_thread': False})
-            return engine
+        try:
+            self.engine = create_engine(
+                DatabaseConfig.get_connection_str(),
+            )
+            logger.info('데이터베이스 엔진 생성 완료')
         
-        # 세션 생성
-        if self.session is None:
-            session = sessionmaker(autocommit=False, autoflush=False, bind=self.engine)
+        except Exception as e:
+            logger.error(f'엔진 생성 실패: {str(e)}')
+            raise
+            
+        try:
+            self.SessionLocal = sessionmaker(
+                autocommit=False,
+                autoflush=False,
+                bind=self.engine
+            )
+            logger.info('세션 팩토리 생성 완료')
+
+        except Exception as e:
+            logger.error(f'세션 생성 실패: {str(e)}')
+            raise
+
+    def get_session(self):
+        """
+        새로운 데이터베이스 세션을 반환합니다.
+        """
+        return self.SessionLocal()
 
 
         
