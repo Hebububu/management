@@ -157,5 +157,27 @@ class Cafe24DataManager():
             else:
                 logger.info('숫자만 입력 가능합니다.')
 
-            # 나머지도 만들어야함 
+        # if category == '기기':
+
+        # if category == '무화기':
+
+        # if category == '코일':
+
+        # if category == '팟':
+
+        # if category == '일회용기기':
+
+        # if category == '악세사리':
+
+        # if category == '기타':
+
+        option_name = input('옵션명을 입력해주세요 (생략 가능): ')
+
+        if sub_category.strip():
+            full_name += '|' + sub_category.strip()
+
+        if option_name.strip():
+            full_name += '|' + option_name.strip()
+
+        return full_name
 
