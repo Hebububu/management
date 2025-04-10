@@ -12,6 +12,7 @@ class Product(Base):
     platform = Column(TEXT, nullable=False)
     seller_id = Column(TEXT, nullable=False)
     product_id = Column(Integer, nullable=False)
+    category = Column(TEXT, nullable=False)
     company = Column(TEXT, nullable=False)
     sale_name = Column(TEXT, nullable=False)
     product_name = Column(TEXT, nullable=False)
@@ -25,6 +26,7 @@ class Product(Base):
         'platform',
         'seller_id',
         'company',
+        'category',
         'product_name',
         name='uq_product'
         ),
@@ -55,8 +57,9 @@ class Margin(Base):
 
     __table_args__ = (
         ForeignKeyConstraint(
-            ['platform','seller_id','company','product_name'],
-            ['product.platform','product.seller_id','product.company','product.product_name']
+            ['platform','seller_id','company','product_name','category'],
+            ['product.platform','product.seller_id','product.company','product.product_name','product.category'],
+            name='fk_margin_product'
         ),
     )
 
@@ -93,7 +96,8 @@ class Log(Base):
     __table_args__ = (
         ForeignKeyConstraint(
             ['user_id'],
-            ['user.id']
+            ['user.id'],
+            name='fk_log_user'
         ),
     )
     user = relationship('User', back_populates='log')
@@ -105,7 +109,7 @@ class Ob(Base):
     __tablename__ = 'ob'
 
     id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
-    history_id = Column(Integer, ForeignKey('ob_history.id'),nullable=False)
+    history_id = Column(Integer, ForeignKey('ob_history.id', name='fk_ob_history'), nullable=False)
     created_at = Column(TIMESTAMP(timezone=True), nullable=False)
 
     history = relationship('ObHistory', back_populates='ob')
@@ -155,7 +159,7 @@ class CrawledDataCoupon(Base):
     __tablename__ = 'crawled_data_coupon'
 
     id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
-    crawled_data_id = Column(Integer, ForeignKey('crawled_data.id'), nullable=False)
+    crawled_data_id = Column(Integer, ForeignKey('crawled_data.id', name='fk_crawled_data_coupon'), nullable=False)
     is_available = Column(BOOLEAN, nullable=False)
     description = Column(TEXT, nullable=True)
     discount_price = Column(Integer, nullable=False) # 기본값 0 넣으면 될듯?
@@ -169,7 +173,7 @@ class CrawledDataShipping(Base):
     __tablename__ = 'crawled_data_shipping'
 
     id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
-    crawled_data_id = Column(Integer, ForeignKey('crawled_data.id'), nullable=False) # 외부 키
+    crawled_data_id = Column(Integer, ForeignKey('crawled_data.id', name='fk_crawled_data_shipping'), nullable=False) # 외부 키
     fee = Column(Integer, nullable=False) # 기본값 0 넣으면 될듯?
     company = Column(TEXT, nullable=False) # 기본값 없음 넣으면 될듯?
     condition = Column(TEXT, nullable=False)
@@ -186,7 +190,7 @@ class CrawledDataPoint(Base):
     __tablename__ = 'crawled_data_point'
 
     id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
-    crawled_data_id = Column(Integer, ForeignKey('crawled_data.id'), nullable=False) # 외부 키
+    crawled_data_id = Column(Integer, ForeignKey('crawled_data.id', name='fk_crawled_data_point'), nullable=False) # 외부 키
     text_point = Column(Integer, nullable=False) # 기본값
     photo_point = Column(Integer, nullable=False) # 기본값
     month_text_point = Column(Integer, nullable=False) # 기본값

@@ -86,6 +86,7 @@ class Cafe24DataManager():
                 'platform': 'cafe24',
                 'seller_id': seller_id,
                 'product_id': product['product_no'],
+                'category': self.select_category(), 
                 'company': input('회사명을 입력해주세요: '),
                 'sale_name': product['product_name'],
                 'product_name': input('관리제품명을 입력해주세요: '),
@@ -106,4 +107,25 @@ class Cafe24DataManager():
         """
         카페 24 제품 데이터를 DB에 INSERT 하는 메소드입니다.
         """
+
+    def select_category(self):
+        """
+        미리 정의된 카테고리 목록을 출력하고, 사용자가 선택한 카테고리를 반환하는 메소드입니다.
+        """
+        categories = ['액상', '기기', '무화기', '소모품', '기타']
+        logger.info('카테고리 목록:')
+        for idx, category in enumerate(categories, 1):
+            logger.info(f'{idx}. {category}')
+
+        while True:
+            choice = input('카테고리 번호를 입력해주세요: ')
+            try:
+                choice = int(choice)
+                if 1 <= choice <= len(categories):
+                    return categories[choice - 1]
+                else:
+                    logger.info('올바른 카테고리 번호를 입력해주세요.')
+            except ValueError:
+                logger.info('숫자만 입력 가능합니다.')
+        
 

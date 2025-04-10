@@ -50,9 +50,11 @@ fetch -> fetch 한 데이터에서 platform, seller_id, product_id, company(손�
 product_name 정규식 표현 생각하기
 
 모든 정보를 넣으려고 하지 말고 쓸 정보만 추려내는 식으로 하자. 
-어차피 Margin 테이블에서 category로 넣어야 하는데.. 
+어차피 margin 테이블에서 category로 넣어야 하는데.. 
 
 차라리 product 테이블에도 category를 넣고, 그 카테고리 입력 후에 product_name 정규화하는게 나을지도 모름
+
+select_category 메소드로 카테고리 선택 구현함. 
 
 정규식 표현대로 sort_products_data에 구현
 
@@ -61,6 +63,11 @@ product_name 정규식 표현 생각하기
 - 액상 옵션명 | 60ml / 30ml / (혹은 생략)
 - 액상 옵션명2 | 3mg / 6mg / 9mg / (혹은 생략)
 - 기기 소분류 | 입호흡기기 / 폐호흡기기 / 기타기기
+- 기기 옵션명 | 
+- 무화기 소분류 |
+- 무화기 옵션명 |
+- 소모품 소분류 |
+- 소모품 옵션명 |
 
 product_name = '제품명' + ' ' + '대분류' + ' ' + '소분류' + ' ' + '옵션명(선택)' 
 strip을 공백으로 할지, 다른 문자열을 사용할지? ('|' 쓰는것도 나쁘지 않을 거 같은데)
@@ -81,6 +88,5 @@ strip을 공백으로 할지, 다른 문자열을 사용할지? ('|' 쓰는것�
 
 위에꺼 대충 다 하고 할거
 insert_all_products 메소드 구현
-
 
 ```
