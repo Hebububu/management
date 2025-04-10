@@ -81,7 +81,7 @@ class Cafe24DataManager():
         sorted_products = []
         for product in all_products:
 
-            logger.info(f'제품 데이터: {product["product_name"]}')
+            logger.info(f'제품명: {product["product_name"]}')
             product_data = {
                 'platform': 'cafe24',
                 'seller_id': seller_id,
@@ -113,7 +113,7 @@ class Cafe24DataManager():
         미리 정의된 카테고리 목록을 출력하고, 사용자가 선택한 카테고리를 반환하는 메소드입니다.
         """
         categories = ['액상', '기기', '무화기', '소모품', '기타']
-        
+
         logger.info('--------------------------------')
         logger.info('카테고리 목록:')
         for idx, category in enumerate(categories, 1):
@@ -130,5 +130,32 @@ class Cafe24DataManager():
                     logger.info('올바른 카테고리 번호를 입력해주세요.')
             except ValueError:
                 logger.info('숫자만 입력 가능합니다.')
-        
+    
+    def define_product_name(self, category: str):
+        """
+        제품 데이터를 기반으로 관리 제품명을 정의하는 메소드입니다.
+        제품명은 입력받은 상품명과 카테고리에 맞는 소분류, 옵션명을 파이프(|)로 연결하여 구성됩니다.
+        대분류(Category)에 따라 미리 정의된 소분류, 옵션명을 사용하거나, 직접 입력할 수 있습니다.
+        Args:
+            category (str): 대분류 카테고리
+        Returns:
+            product_name (str): 관리제품명
+        """
+        product_name = input('상품명을 입력해주세요: ')
+        if category == '액상':
+            sub_categories = ['입호흡액상', '폐호흡액상', '기타액상']
+            logger.info('액상 카테고리 소분류 목록:')
+            for idx, sub_category in enumerate(sub_categories, 1):
+                logger.info(f'{idx}. {sub_category}')
+            sub_choice = input('소분류 번호를 입력해주세요: ')
+            if sub_choice.isdigit():
+                idx = int(sub_choice)
+                if 1 <= idx <= len(sub_categories):
+                    sub_category = sub_categories[idx - 1]
+                else:
+                    logger.info('올바른 소분류 번호를 입력해주세요.')
+            else:
+                logger.info('숫자만 입력 가능합니다.')
+
+            # 나머지도 만들어야함 
 
