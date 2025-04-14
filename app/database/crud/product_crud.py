@@ -4,7 +4,7 @@ from app.database.databasesetup import DatabaseSetup
 from app.database.models import Product
 
 # 로거 설정
-logger = mainLogger
+logger = mainLogger()
 
 # 데이터베이스 셋업 클래스 설정
 db = DatabaseSetup()
@@ -16,7 +16,6 @@ class ProductCRUD:
 
     def __init__(self):
         self.db = db
-        self.logger = logger
 
     def create_product(self, product_data: dict) -> Product:
         """
@@ -27,6 +26,7 @@ class ProductCRUD:
                 'platform' : 'platform_value',
                 'seller_id' : 'seller_value',
                 'product_id' : 123456789,
+                'category' : 'category_value',
                 'company' : 'company_value',
                 'sale_name' : 'sale_name_value',
                 'product_name' : 'product_name_value',
@@ -45,6 +45,7 @@ class ProductCRUD:
                 platform=product_data['platform'],
                 seller_id=product_data['seller_id'],
                 product_id=product_data['product_id'],
+                category=product_data['category'],
                 company=product_data['company'],
                 sale_name=product_data['sale_name'],
                 product_name=product_data['product_name'],
@@ -54,10 +55,10 @@ class ProductCRUD:
             )
             session.add(new_product)
             session.commit()
-            self.logger.info(f'{product_data["product_name"]} 제품 생성 완료')
+            logger.info(f'{product_data["product_name"]} 제품 생성 완료')
             return new_product
         except Exception as e:
-            self.logger.error(f'제품 생성 중 오류 발생: {e}')
+            logger.error(f'제품 생성 중 오류 발생: {e}')
             session.rollback()
             return None
         finally:

@@ -133,3 +133,9 @@ DB 삽입을 일괄로 하지 말고, 입력할때마다 1개씩 삽입하도록
 
 # 250414
 
+위에서 생각한 product_name 정규화 방식대로 define_product_name() 메소드를 구현했다. 
+
+저번에 생각했던 대로 sort_products_data -> define_product_name -> insert_products 
+
+제품 한개당 한개씩 DB에 등록하는 로직으로 만들면 될 것 같다.
+

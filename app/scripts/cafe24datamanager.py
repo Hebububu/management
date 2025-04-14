@@ -1,5 +1,6 @@
 from app.utils.logger import mainLogger
 from app.scripts.cafe24tokenmanager import TokenManager
+from app.database.crud.product_crud import ProductCRUD
 
 import requests
 import json
@@ -11,6 +12,8 @@ logger = mainLogger()
 # 토큰 매니저 정의
 token = TokenManager()
 
+# 제품 데이터 관리 클래스   
+crud = ProductCRUD()
 class Cafe24DataManager():
     """
     카페 24 관련 데이터를 처리하는 클래스입니다.
@@ -82,14 +85,16 @@ class Cafe24DataManager():
         for product in all_products:
 
             logger.info(f'제품명: {product["product_name"]}')
+
+            selected_category = self.select_category()
             product_data = {
                 'platform': 'cafe24',
                 'seller_id': seller_id,
                 'product_id': product['product_no'],
-                'category': self.select_category(), 
+                'category': selected_category, 
                 'company': input('회사명을 입력해주세요: '),
                 'sale_name': product['product_name'],
-                'product_name': self.define_product_name(product['category']),
+                'product_name': self.define_product_name(selected_category),
                 'data': product,
                 'created_at': datetime.datetime.utcnow(),
                 'updated_at': datetime.datetime.utcnow()
@@ -101,12 +106,18 @@ class Cafe24DataManager():
 
             sorted_products.append(product_data)
 
+            crud.create_product(product_data)
+
         return sorted_products
 
-    def insert_all_products(self):
-        """
-        카페 24 제품 데이터를 DB에 INSERT 하는 메소드입니다.
-        """
+    # def insert_products(self, sorted_products: list):
+    #     """
+    #     카페 24 제품 데이터를 DB에 INSERT 하는 메소드입니다.
+    #     Args:
+    #         sorted_products (list): 정렬된 제품 데이터 객체
+    #     returns:
+    #         None
+    #     """
 
     def select_category(self):
         """

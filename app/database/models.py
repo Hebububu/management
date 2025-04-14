@@ -100,7 +100,7 @@ class Log(Base):
             name='fk_log_user'
         ),
     )
-    user = relationship('User', back_populates='log')
+    user = relationship('User', back_populates='logs')
 
 class Ob(Base):
     """

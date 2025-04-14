@@ -28,7 +28,7 @@ class DatabaseConfig:
         SQLAlchemy 연결용 문자열을 생성하는 메소드입니다.
             Returns: pgsql 연결 문자열
         """
-        return f"postgresql+asyncpg://{cls.PG_USER}:{cls.PG_PASSWORD}@{cls.PG_HOST}:{cls.PG_PORT}/{cls.PG_DB}"
+        return f"postgresql+psycopg2://{cls.PG_USER}:{cls.PG_PASSWORD}@{cls.PG_HOST}:{cls.PG_PORT}/{cls.PG_DB}"
     
     @classmethod
     def initialize(cls):
