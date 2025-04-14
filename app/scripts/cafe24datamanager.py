@@ -90,15 +90,15 @@ class Cafe24DataManager():
         for product in all_products:
             logger.info(f'제품명: {product["product_name"]}')
 
-            selected_category = self.select_category()
             product_data = {
                 'platform': 'cafe24',
                 'seller_id': seller_id,
                 'product_id': product['product_no'],
-                'category': selected_category, 
-                'company': input('회사명을 입력해주세요: '),
+                'category': None,
+                'company': None,
                 'sale_name': product['product_name'],
-                'product_name': self.define_product_name(selected_category),
+                'product_name': None,
+                'tags': None,
                 'data': product,
                 'created_at': datetime.datetime.utcnow(),
                 'updated_at': datetime.datetime.utcnow()
@@ -145,19 +145,17 @@ class Cafe24DataManager():
                 logger.info('숫자만 입력 가능합니다.')
     
 
-    def define_product_name(self, category: str):
+    def define_tags(self, category: str):
         """
-        제품 데이터를 기반으로 관리 제품명을 정의하는 메소드입니다.
-        제품명은 입력받은 상품명과 카테고리에 맞는 소분류, 옵션명을 파이프(|)로 연결하여 구성됩니다.
+        제품 데이터를 기반으로 태그를 정의하는 메소드입니다.
+        태그는 입력받은 상품명과 카테고리에 맞는 소분류, 옵션명을 파이프(|)로 연결하여 구성됩니다.
         대분류(Category)에 따라 미리 정의된 소분류, 옵션명을 사용하거나, 직접 입력할 수 있습니다.
         Args:
             category (str): 대분류 카테고리
         Returns:
-            full_name (str): 관리제품명
+            tags (str): 태그
         """
-        
-        base_name = input('기본 제품명을 입력해주세요: ')
-        full_name = base_name
+        tags = ''
 
         # 액상 카테고리
         if category == '액상':
@@ -219,13 +217,13 @@ class Cafe24DataManager():
                 nicotine_option = input('니코틴 함유량을 입력해주세요: ')
 
             if 'sub_category' in locals():
-                full_name += f'|{sub_category}'
+                tags += f'|{sub_category}'
 
             if 'volume_option' in locals():
-                full_name += f'|{volume_option}'
+                tags += f'|{volume_option}'
 
             if 'nicotine_option' in locals() and nicotine_option.strip():
-                full_name += f'|{nicotine_option}'
+                tags += f'|{nicotine_option}'
                 
                 
         # 기기 카테고리
@@ -250,10 +248,10 @@ class Cafe24DataManager():
             sub_options = input('옵션명을 입력해주세요(생략 가능): ')
 
             if 'sub_category' in locals():
-                full_name += f'|{sub_category}'
+                tags += f'|{sub_category}'
 
             if 'sub_options' in locals() and sub_options.strip():
-                full_name += f'|{sub_options.strip()}'
+                tags += f'|{sub_options.strip()}'
 
         # 무화기 카테고리
         if category == '무화기':
@@ -292,20 +290,20 @@ class Cafe24DataManager():
             second_sub_options = input('세부 옵션명을 입력해주세요(생략 가능): ')
 
             if 'sub_category' in locals():
-                full_name += f'|{sub_category}'
+                tags += f'|{sub_category}'
 
             if 'sub_option' in locals():
-                full_name += f'|{sub_option}'
+                tags += f'|{sub_option}'
 
             if 'second_sub_options' in locals() and second_sub_options.strip():
-                full_name += f'|{second_sub_options.strip()}'
+                tags += f'|{second_sub_options.strip()}'
 
         # 코일 카테고리
         if category == '코일':
             sub_option_choice = input('옵션명을 입력해주세요(생략 가능): ')
 
             if 'sub_option_choice' in locals() and sub_option_choice.strip():
-                full_name += f'|코일|{sub_option_choice.strip()}'
+                tags += f'|코일|{sub_option_choice.strip()}'
 
         # 팟 카테고리
         if category == '팟':
@@ -329,10 +327,10 @@ class Cafe24DataManager():
             ohm_option = input('옴 옵션을 입력해주세요(생략 가능): ')
 
             if 'sub_option' in locals():
-                full_name += f'|{sub_option}'
+                tags += f'|{sub_option}'
             
             if 'ohm_option' in locals() and ohm_option.strip():
-                full_name += f'{ohm_option.strip()}'
+                tags += f'{ohm_option.strip()}'
 
         if category == '일회용기기':
             sub_options = ['일체형', '교체형', '무니코틴', '기타일회용기기']
@@ -373,10 +371,10 @@ class Cafe24DataManager():
             detail_option = input('세부 옵션명을 입력해주세요(생략 가능): ')
 
             if 'sub_option' in locals():
-                full_name += f'|{sub_option}'
+                tags += f'|{sub_option}'
 
             if 'detail_option' in locals() and detail_option.strip():
-                full_name += f'|{detail_option.strip()}'
+                tags += f'|{detail_option.strip()}'
 
 
         if category == '악세사리':
@@ -400,10 +398,10 @@ class Cafe24DataManager():
             sub_detail_option = input('세부 옵션명을 입력해주세요(생략 가능): ')
 
             if 'sub_option' in locals():
-                full_name += f'|{sub_option}'
+                tags += f'|{sub_option}'
 
             if 'sub_detail_option' in locals() and sub_detail_option.strip():
-                full_name += f'|{sub_detail_option.strip()}'
+                tags += f'|{sub_detail_option.strip()}'
 
         if category == '기타':
             sub_option = '기타'
@@ -411,9 +409,9 @@ class Cafe24DataManager():
             sub_detail_option = input('세부 옵션명을 입력해주세요(생략 가능): ')
 
             if sub_option in locals():
-                full_name += f'|{sub_option}'
+                tags += f'|{sub_option}'
 
             if sub_detail_option in locals() and sub_detail_option.strip():
-                full_name += f'|{sub_detail_option.strip()}'
+                tags += f'|{sub_detail_option.strip()}'
 
-        return full_name
+        return tags

@@ -30,6 +30,7 @@ class ProductCRUD:
                 'company' : 'company_value',
                 'sale_name' : 'sale_name_value',
                 'product_name' : 'product_name_value',
+                'tags' : 'tags_value',
                 'data' : { json 객체 },
                 'created_at' : datetime 객체,
                 'updated_at' : datetime 객체
@@ -49,6 +50,7 @@ class ProductCRUD:
                 company=product_data['company'],
                 sale_name=product_data['sale_name'],
                 product_name=product_data['product_name'],
+                tags=product_data['tags'],
                 data=product_data['data'],
                 created_at=product_data['created_at'],
                 updated_at=product_data['updated_at']
