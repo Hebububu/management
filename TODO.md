@@ -139,3 +139,12 @@ DB 삽입을 일괄로 하지 말고, 입력할때마다 1개씩 삽입하도록
 
 제품 한개당 한개씩 DB에 등록하는 로직으로 만들면 될 것 같다.
 
+제품 등록시 중복(이미 DB에 인서트 되어 있는 상품이면) data만 업데이트 하게끔 로직을 수정해야함. 
+
+메소드 새로 만들기
+get_product_by_unique_keys
+
+create_or_update_product
+
+unique_keys를 통해서 product 필터링
+if existing_product를 통해 이미 존재하는 제품이면 data만 업데이트

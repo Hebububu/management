@@ -64,6 +64,28 @@ class ProductCRUD:
         finally:
             session.close()
 
+    def get_product_by_unique_keys():
+        """
+        복합 고유키를 사용하여 제품을 조회합니다.
+        Args:
+            platform (str) : 플랫폼 이름
+            seller_id (str) : 판매자 ID
+            product_id (int) : 제품 ID
+        Returns:
+            조회된 Product 객체 (성공 시)
+            None (실패 시)
+        """
+
+    def create_or_update_product(self, product_data: dict) -> Product:
+        """
+        제품이 존재하면 data 필드만 업데이트하고,
+        없으면 새로 생성합니다.
+        Args:
+            product_data (dict) : 제품 정보를 담은 딕셔너리
+        Returns:
+            생성된 Product 객체 (성공 시)
+            None (실패 시)
+        """
 
     def get_product_by_id(self, product_id: int) -> Product:
         """
