@@ -149,3 +149,12 @@ create_or_update_product
 
 unique_keys를 통해서 product 필터링
 if existing_product를 통해 이미 존재하는 제품이면 data만 업데이트
+
+product 테이블에 tags column 추가. 
+product_name은 최소한의 제품명으로 수정.
+tags에 소분류 및 옵션명 등등을 넣는걸로 변경
+
+company, product_name, tags, category 같이 직접 입력해야하는 rows는 그냥 null인채로 인서트부터하고
+그 뒤에 스크립트 작성해서 넣든지 말던지 할것. 
+
+alembic으로 수정 

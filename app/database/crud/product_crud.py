@@ -89,40 +89,6 @@ class ProductCRUD:
             return None
         finally:
             session.close()
-
-    def create_or_update_product(self, product_data: dict) -> Product:
-        """
-        제품이 존재하면 data 필드만 업데이트하고,
-        없으면 새로 생성합니다.
-        Args:
-            product_data (dict) : 제품 정보를 담은 딕셔너리
-        Returns:
-            생성된 Product 객체 (성공 시)
-            None (실패 시)
-        """
-
-        existing_product = self.get_product_by_unique_keys(
-            product_data['platform'],
-            product_data['seller_id'],
-            product_data['product_id']
-        )
-
-        if existing_product:
-            session = self.db.get_session()
-            try:
-                existing_product.data = product_data['data']
-                existing_product.updated_at = product_data['updated_at']
-                session.commit()
-                logger.info(f'{product_data["product_name"]} 제품 업데이트 완료')
-                return existing_product
-            except Exception as e:
-                logger.error(f'제품 업데이트 중 오류 발생: {e}')
-                session.rollback()
-                return None
-            finally:
-                session.close()
-        else:
-            return self.create_product(product_data)
                 
     def get_product_by_id(self, product_id: int) -> Product:
         """

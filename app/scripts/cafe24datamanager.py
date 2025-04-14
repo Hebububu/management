@@ -77,13 +77,17 @@ class Cafe24DataManager():
         DB 저장에 필요한 정보를 추출하고 객체로 만드는 메소드입니다.
         Args:
             seller_id (str): 카페24 스토어명입니다.
-            all_products (dict): 제품 데이터 객체
+            all_products (dict|list): 제품 데이터 객체 또는 객체 목록
         returns:
             sorted_products (list): 정렬된 제품 데이터 객체
         """
         sorted_products = []
+        
+        # 단일 제품인 경우 리스트로 변환
+        if not isinstance(all_products, list):
+            all_products = [all_products]
+            
         for product in all_products:
-
             logger.info(f'제품명: {product["product_name"]}')
 
             selected_category = self.select_category()
@@ -106,8 +110,6 @@ class Cafe24DataManager():
 
             sorted_products.append(product_data)
 
-            crud.create_or_update_product(product_data)
-
         return sorted_products
 
     # def insert_products(self, sorted_products: list):
@@ -123,7 +125,7 @@ class Cafe24DataManager():
         """
         미리 정의된 카테고리 목록을 출력하고, 사용자가 선택한 카테고리를 반환하는 메소드입니다.
         """
-        categories = ['액상', '기기', '무화기', '소모품', '기타']
+        categories = ['액상', '기기', '무화기', '코일', '팟', '일회용기기', '악세사리', '기타']
 
         logger.info('--------------------------------')
         logger.info('카테고리 목록:')
