@@ -106,7 +106,7 @@ class Cafe24DataManager():
 
             sorted_products.append(product_data)
 
-            crud.create_product(product_data)
+            crud.create_or_update_product(product_data)
 
         return sorted_products
 

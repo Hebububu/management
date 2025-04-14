@@ -64,7 +64,7 @@ class ProductCRUD:
         finally:
             session.close()
 
-    def get_product_by_unique_keys():
+    def get_product_by_unique_keys(self, platform: str, seller_id: str, product_id: int) -> Product:
         """
         복합 고유키를 사용하여 제품을 조회합니다.
         Args:
@@ -75,6 +75,20 @@ class ProductCRUD:
             조회된 Product 객체 (성공 시)
             None (실패 시)
         """
+
+        session = self.db.get_session()
+        try:
+            product = session.query(Product).filter(
+                Product.platform == platform,
+                Product.seller_id == seller_id,
+                Product.product_id == product_id
+            ).first()
+            return product
+        except Exception as e:
+            logger.error(f'제품 조회 중 오류 발생: {e}')
+            return None
+        finally:
+            session.close()
 
     def create_or_update_product(self, product_data: dict) -> Product:
         """
@@ -87,6 +101,29 @@ class ProductCRUD:
             None (실패 시)
         """
 
+        existing_product = self.get_product_by_unique_keys(
+            product_data['platform'],
+            product_data['seller_id'],
+            product_data['product_id']
+        )
+
+        if existing_product:
+            session = self.db.get_session()
+            try:
+                existing_product.data = product_data['data']
+                existing_product.updated_at = product_data['updated_at']
+                session.commit()
+                logger.info(f'{product_data["product_name"]} 제품 업데이트 완료')
+                return existing_product
+            except Exception as e:
+                logger.error(f'제품 업데이트 중 오류 발생: {e}')
+                session.rollback()
+                return None
+            finally:
+                session.close()
+        else:
+            return self.create_product(product_data)
+                
     def get_product_by_id(self, product_id: int) -> Product:
         """
         제품 ID를 기반으로 제품 정보를 조회합니다.
