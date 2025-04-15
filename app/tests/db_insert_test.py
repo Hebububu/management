@@ -11,7 +11,7 @@ crud = ProductCRUD()
 
 cafe24 = Cafe24DataManager()
 
-seller_id = 'richcp' # 리치로 테스트
+seller_id = 'siasiucp'
 platform = 'cafe24'
 
 # 카페24로부터 제품 데이터 불러오기

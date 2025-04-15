@@ -17,3 +17,7 @@
 
 # 데이터 파일
 /products_output.json
+
+# 토큰 파일
+/richcp_tokens.json
+/siasiucp_tokens.json

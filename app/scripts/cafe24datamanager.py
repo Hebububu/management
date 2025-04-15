@@ -112,14 +112,6 @@ class Cafe24DataManager():
 
         return sorted_products
 
-    # def insert_products(self, sorted_products: list):
-    #     """
-    #     카페 24 제품 데이터를 DB에 INSERT 하는 메소드입니다.
-    #     Args:
-    #         sorted_products (list): 정렬된 제품 데이터 객체
-    #     returns:
-    #         None
-    #     """
 
     def select_category(self):
         """

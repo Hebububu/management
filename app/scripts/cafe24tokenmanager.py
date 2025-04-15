@@ -10,24 +10,42 @@ load_dotenv()
 
 # 로거 설정
 logger = mainLogger()
-
-
-# 쇼핑몰 변수 정의
-code = input('1분간 유효한 인증 코드를 입력하세요.: ')
-mall_id = os.getenv('RICHCP_MALL')
-redirect_uri = f'https://{mall_id}.cafe24.com/order/basket.html'
-
-# 토큰 저장된 파일명
-FILENAME = 'tokens.json'
-
-
 class TokenManager:
 
-    def __init__(self, mall_id=mall_id, filename=FILENAME, redirect_uri=redirect_uri):
-        self.code = code
-        self.mall_id = mall_id
-        self.filename = filename
-        self.redirect_uri = redirect_uri
+    def __init__(self, config_prefix=None, code=None, mall_id=None, filename=None, redirect_uri=None):
+        if config_prefix is None:
+            logger.info('사용할 쇼핑몰을 선택하세요')
+            logger.info('1. SIASIU')
+            logger.info('2. RICHCP')
+            choice = input('번호를 입력해주세요')
+            if choice == '1':
+                self.config_prefix = 'SIASIUCP'
+            elif choice == '2':
+                self.config_prefix = 'RICHCP'
+            else:
+                logger.error('잘못된 번호입니다.')
+                exit()
+
+        if mall_id is None:
+            self.mall_id = os.getenv(f'{self.config_prefix}_MALL')
+        else:
+            self.mall_id = mall_id
+
+        if redirect_uri is None:
+            self.redirect_uri = f'https://{self.mall_id}.cafe24.com/order/basket.html'
+        else:
+            self.redirect_uri = redirect_uri
+
+        if code is None:
+            self.get_auth_code()
+            self.code = input('1분간 유효한 인증 코드를 입력하세요.: ')
+
+        if filename is None:
+            self.filename = f'{self.config_prefix}_tokens.json'
+        else:
+            self.filename = filename
+
+
         self.base64encode_atr = self.encode_client()
         self.tokens = self.load_tokens()
 
@@ -36,8 +54,8 @@ class TokenManager:
         최초 인증 코드를 받기 위한 함수입니다.
         """
         mall_id = self.mall_id
-        client_id = os.getenv("RICHCP_CLIENT_ID")
-        redirect_uri = f'https://{mall_id}.cafe24.com/order/basket.html'
+        client_id = os.getenv(f'{self.config_prefix}_CLIENT_ID')
+        redirect_uri = self.redirect_uri
         state = 'app_install'
         scope = 'mall.read_application,mall.write_application,mall.read_product,mall.write_product,mall.read_store,mall.write_store'
 
@@ -48,8 +66,8 @@ class TokenManager:
         """
         클라이언트 정보를 base64 인코딩합니다.
         """
-        client_id = os.getenv('RICHCP_CLIENT_ID')
-        client_secret = os.getenv('RICHCP_CLIENT_SECRET')
+        client_id = os.getenv(f'{self.config_prefix}_CLIENT_ID')
+        client_secret = os.getenv(f'{self.config_prefix}_CLIENT_SECRET')
 
         code = f'{client_id}:{client_secret}'
         encoded_code = base64.b64encode(code.encode('utf-8'))

@@ -112,17 +112,43 @@ class ProductCRUD:
             None (실패 시)
         """
 
-    def update_product(self, product_id: int, update_data: dict) -> bool:
+    def update_product(self, product_id: int, platform: str, seller_id: str, update_data: dict) -> bool:
         """
         제품 정보를 업데이트합니다.
         Args:
             product_id (int) : 업데이트 할 제품의 고유 ID
+            platform (str) : 플랫폼 이름
+            seller_id (str) : 판매자 ID
             update_data (dict) : 업데이트 할 데이터를 담은 딕셔너리
                 예시 : {'sale_name': 'new_sale_name', 'data': {new_data}}
         returns:
             업데이트 성공 시 True
             업데이트 실패 시 False
         """
+
+        session = self.db.get_session()
+
+        try:
+            product = session.query(Product).filter(
+                Product.platform == platform,
+                Product.seller_id == seller_id,
+                Product.product_id == product_id
+            ).first()
+            if product:
+                for key, value in update_data.items():
+                    setattr(product, key, value)
+                session.commit()
+                logger.info(f'{product.product_name} 제품 업데이트 완료')
+                return True
+            else:
+                logger.error(f'{product.product_name} 제품 업데이트 실패')
+                return False
+        except Exception as e:
+            logger.error(f'제품 업데이트 중 오류 발생: {e}')
+            session.rollback()
+            return False
+        finally:
+            session.close()
 
     def delete_product(self, product_id: int) -> bool:
         """

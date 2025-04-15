@@ -163,10 +163,10 @@ alembic으로 수정
 
 # 250415
 
-스토어별 API키 인자로 받아오게끔 tokenmanager 수정
-S 스토어 API키 발급받고 DB INSERT
+스토어별 API키 인자로 받아오게끔 tokenmanager 수정 - 했음 
+S 스토어 API키 발급받고 DB INSERT - 했음
 
-product crud 에서 update 로직 만들기
+product crud 에서 update 로직 만들기 - 했음
 cafe24datamanager에서 define_tags / select_category 수정 + product_name 입력 메소드 만들기
 
 테스트코드 작성 후 카테고리 입력 + 태그 넣기
