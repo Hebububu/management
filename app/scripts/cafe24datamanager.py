@@ -116,6 +116,8 @@ class Cafe24DataManager():
     def select_category(self):
         """
         미리 정의된 카테고리 목록을 출력하고, 사용자가 선택한 카테고리를 반환하는 메소드입니다.
+        Returns:
+            category (dict): 선택된 카테고리
         """
         categories = ['액상', '기기', '무화기', '코일', '팟', '일회용기기', '악세사리', '기타']
 

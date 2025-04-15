@@ -173,3 +173,4 @@ cafe24datamanager에서 define_tags / select_category 수정 + product_name 입�
 
 오늘 중으로 카페24 데이터는 마무리하고 네이버로 넘어가기
 
+UQ 제약조건에 tags도 포함시켜야함.. 

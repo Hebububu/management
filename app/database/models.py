@@ -29,6 +29,7 @@ class Product(Base):
         'company',
         'category',
         'product_name',
+        'tags',
         name='uq_product'
         ),
     )
