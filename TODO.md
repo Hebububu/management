@@ -175,3 +175,16 @@ cafe24datamanager에서 define_tags / select_category 수정 + product_name 입�
 오늘 중으로 카페24 데이터는 마무리하고 네이버로 넘어가기 - 2400개라 오늘안에 못함;
 
 UQ 제약조건에 tags도 포함시켜야함.. 
+
+네이버 NaverTokenManager 작성
+네이버 NaverDataManger 작성
+
+- 2개 실제 API 키 발급받고 테스트해봐야함. 
+
+product_name 및 기타 직접 입력해야 하는 정보는 일단 제끼고
+
+전부 DB insert 부터 진행..
+
+product 테이블에서 margin 테이블로 마이그레이션하는 스크립트 작성
+
+(어차피 이거 스토어별로 작성해야되지 싶음)
