@@ -167,10 +167,11 @@ alembic으로 수정
 S 스토어 API키 발급받고 DB INSERT - 했음
 
 product crud 에서 update 로직 만들기 - 했음
+
 cafe24datamanager에서 define_tags / select_category 수정 + product_name 입력 메소드 만들기
 
 테스트코드 작성 후 카테고리 입력 + 태그 넣기
 
-오늘 중으로 카페24 데이터는 마무리하고 네이버로 넘어가기
+오늘 중으로 카페24 데이터는 마무리하고 네이버로 넘어가기 - 2400개라 오늘안에 못함;
 
 UQ 제약조건에 tags도 포함시켜야함.. 
