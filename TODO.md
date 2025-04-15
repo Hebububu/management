@@ -158,3 +158,18 @@ company, product_name, tags, category 같이 직접 입력해야하는 rows는 �
 그 뒤에 스크립트 작성해서 넣든지 말던지 할것. 
 
 alembic으로 수정 
+
+환경변수로 스토어별 토큰 관리하기 
+
+# 250415
+
+스토어별 API키 인자로 받아오게끔 tokenmanager 수정
+S 스토어 API키 발급받고 DB INSERT
+
+product crud 에서 update 로직 만들기
+cafe24datamanager에서 define_tags / select_category 수정 + product_name 입력 메소드 만들기
+
+테스트코드 작성 후 카테고리 입력 + 태그 넣기
+
+오늘 중으로 카페24 데이터는 마무리하고 네이버로 넘어가기
+
