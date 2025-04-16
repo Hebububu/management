@@ -126,7 +126,7 @@ class ObHistory(Base):
     platform = Column(TEXT, nullable=False)
     seller_id = Column(TEXT, nullable=False)
     product_id = Column(TEXT, nullable=False)
-    compnay = Column(TEXT, nullable=False)
+    company = Column(TEXT, nullable=False)
     product_name = Column(TEXT, nullable=False) 
     price = Column(Integer, nullable=False)
     category = Column(TEXT, nullable=False)
