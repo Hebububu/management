@@ -12,39 +12,21 @@ load_dotenv()
 logger = mainLogger()
 class TokenManager:
 
-    def __init__(self, config_prefix=None, code=None, mall_id=None, filename=None, redirect_uri=None):
-        if config_prefix is None:
-            logger.info('사용할 쇼핑몰을 선택하세요')
-            logger.info('1. SIASIU')
-            logger.info('2. RICHCP')
-            choice = input('번호를 입력해주세요')
-            if choice == '1':
-                self.config_prefix = 'SIASIUCP'
-            elif choice == '2':
-                self.config_prefix = 'RICHCP'
-            else:
-                logger.error('잘못된 번호입니다.')
-                exit()
+    def __init__(self, config_prefix: str, code=None, mall_id=None, filename=None, redirect_uri=None):
 
-        if mall_id is None:
-            self.mall_id = os.getenv(f'{self.config_prefix}_MALL')
-        else:
-            self.mall_id = mall_id
+        self.config_prefix = config_prefix
 
-        if redirect_uri is None:
-            self.redirect_uri = f'https://{self.mall_id}.cafe24.com/order/basket.html'
-        else:
-            self.redirect_uri = redirect_uri
+        self.mall_id = mall_id if mall_id else os.getenv(f'{self.config_prefix}_MALL')
+
+        self.redirect_uri = redirect_uri if redirect_uri else f'https://{self.mall_id}.cafe24.com/order/basket.html'
 
         if code is None:
             self.get_auth_code()
-            self.code = input('1분간 유효한 인증 코드를 입력하세요.: ')
-
-        if filename is None:
-            self.filename = f'{self.config_prefix}_tokens.json'
+            self.code = None
         else:
-            self.filename = filename
+            self.code = code
 
+        self.filename = filename if filename else f'{self.config_prefix}_tokens.json'
 
         self.base64encode_atr = self.encode_client()
         self.tokens = self.load_tokens()

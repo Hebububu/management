@@ -1,8 +1,14 @@
 import discord
 import os
+import sys
 from dotenv import load_dotenv
 from discord.ext import commands
 from app.utils.logger import mainLogger
+
+# PYTHONPATH 설정
+currunt_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.dirname(currunt_dir)
+sys.path.append(project_root)
 
 # 로거 정의
 logger = mainLogger()
@@ -19,7 +25,7 @@ bot = commands.Bot(command_prefix=';;', intents=discord.Intents.all())
 async def load_extensions():
     for filename in os.listdir('./app/bot/cogs'):
         if filename.endswith('.py') and filename != '__init__.py':
-            extension = 'cogs.' + filename[:-3]
+            extension = (f'app.bot.cogs.{filename[:-3]}')
             logger.info(f'{extension} 익스텐션 로드 중...')
             try:
                 await bot.load_extension(extension)

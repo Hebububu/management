@@ -1,6 +1,7 @@
 from app.utils.logger import mainLogger
 from app.scripts.cafe24tokenmanager import TokenManager
 from app.database.crud.product_crud import ProductCRUD
+from app.database.models import Product
 
 import requests
 import json
@@ -8,9 +9,6 @@ import datetime
 
 # 로거 정의
 logger = mainLogger()
-
-# 토큰 매니저 정의
-token = TokenManager()
 
 # 제품 데이터 관리 클래스   
 crud = ProductCRUD()
@@ -22,7 +20,6 @@ class Cafe24DataManager():
 
     def __init__(self):
         self.logger = logger
-        self.token = token
     
 
     def get_all_products(self, seller_id: str):
@@ -33,6 +30,7 @@ class Cafe24DataManager():
         returns:
             all_products (dict): 제품 데이터 객체
         """
+        token = TokenManager(config_prefix=seller_id)
         access_token = token.get_access_token()
         logger.info(f'액세스 토큰: {access_token}')
 
@@ -51,6 +49,7 @@ class Cafe24DataManager():
             response = requests.get(url, headers=headers)
 
             if response.status_code != 200 or not response.text.strip():
+                logger.info(f'response: {response.text}')
                 logger.error('응답이 비어 있습니다. 종료합니다.')
                 break
             try:
@@ -111,6 +110,35 @@ class Cafe24DataManager():
             sorted_products.append(product_data)
 
         return sorted_products
+
+    # platform, seller_id, product_id로 중복 제품 필터링 
+    def filter_duplicated_products(self, all_products: dict, seller_id: str):
+        """
+        중복 제품을 필터링하는 메소드입니다.
+        Args:
+            all_products (dict): 제품 데이터 객체
+            seller_id (str): 카페24 스토어명입니다.
+        returns:
+            filtered_products (list): 중복 제품을 제외한 제품 데이터 객체
+        """
+
+        filtered_products = []
+        session = crud.db.get_session()
+
+        db_products = session.query(Product.product_id).filter(
+            Product.platform == 'cafe24',
+            Product.seller_id == seller_id
+        ).all()
+
+        db_product_ids = { pid for (pid,) in db_products }
+
+        for product in all_products:
+            if product['product_no'] not in db_product_ids:
+                filtered_products.append(product)
+
+        session.close()
+
+        return filtered_products
 
 
     def select_category(self):

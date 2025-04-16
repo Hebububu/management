@@ -195,3 +195,15 @@ product 테이블에서 margin 테이블로 마이그레이션하는 스크립�
 
 수기입력을 디스코드 봇으로 하게 UI/UX 만들것.
 
+Cogs 분류 생각 
+
+product 공통 cogs / 플랫폼별 cogs 분리 
+
+봇에서 쓸 수 있게 토큰매니저 수정해야함 
+
+seller_id 로 prefix 입력받기..?
+
+- fetch_{platform}_products -> DB insert -> 유저에게 embed로 unfulfilled product 알림 -> add_tags
+
+- add_tags (product_name, tags, company, category)
+    - 구현할거 생각해놓기
