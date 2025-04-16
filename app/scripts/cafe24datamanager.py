@@ -14,6 +14,7 @@ token = TokenManager()
 
 # 제품 데이터 관리 클래스   
 crud = ProductCRUD()
+
 class Cafe24DataManager():
     """
     카페 24 관련 데이터를 처리하는 클래스입니다.
@@ -31,7 +32,6 @@ class Cafe24DataManager():
             seller_id (str): 카페24 스토어명입니다.
         returns:
             all_products (dict): 제품 데이터 객체
-            }
         """
         access_token = token.get_access_token()
         logger.info(f'액세스 토큰: {access_token}')
