@@ -3,6 +3,7 @@ import discord
 from app.utils.logger import mainLogger
 from app.database.crud.product_crud import ProductCRUD
 from app.bot.views.product_views import ProductTaggingView
+from app.bot.views.product_list_view import ProductListView
 
 # 로거 정의
 logger = mainLogger()
@@ -36,26 +37,20 @@ class ProductCommands(commands.Cog):
                 await ctx.send("미완성 제품이 없습니다.")
                 return
             
-            # 임베드 생성
-            embed = discord.Embed(
-                title="태그 미입력 제품 목록", 
-                color=discord.Color.blue(),
-                description=f"총 {len(products)}개의 미완성 제품이 있습니다."
+            # 커스텀 포매터 정의
+            def unfulfilled_formatter(product):
+                return f"ID: {product.id}\n플랫폼: {product.platform}\n판매자: {product.seller_id}\n판매명: {product.sale_name}"
+            
+            # 제품 리스트 뷰 생성
+            view = ProductListView(
+                products=products,
+                user_id=ctx.author.id,
+                title="태그 미입력 제품 목록",
+                per_page=5,
+                custom_formatter=unfulfilled_formatter
             )
             
-            # 최대 10개 제품 표시
-            for i, product in enumerate(products[:10], 1):
-                embed.add_field(
-                    name=f"{i}. {product.sale_name}",
-                    value=f"ID: {product.id} | 플랫폼: {product.platform} | 판매자: {product.seller_id}",
-                    inline=False
-                )
-            
-            # 추가 제품이 있는 경우 푸터 추가
-            if len(products) > 10:
-                embed.set_footer(text=f"외 {len(products) - 10}개 제품이 더 있습니다.")
-            
-            await ctx.send(embed=embed)
+            await ctx.send(embed=view.get_current_page_embed(), view=view)
             logger.info(f"미완성 제품 목록 표시됨 (총 {len(products)}개)")
             
         except Exception as e:
@@ -238,31 +233,29 @@ class ProductCommands(commands.Cog):
                 await ctx.send(f"'{search_term}'에 대한 검색 결과가 없습니다.")
                 return
             
-            # 임베드 생성
-            embed = discord.Embed(
-                title=f"'{search_term}' 검색 결과", 
-                color=discord.Color.blue(),
-                description=f"총 {len(products)}개의 제품이 검색되었습니다."
+            # 커스텀 포매터 정의
+            def search_formatter(product):
+                product_name = product.product_name if product.product_name else "미정의 제품명"
+                company = product.company if product.company else "미정의 회사명"
+                category = product.category if product.category else "미정의 카테고리"
+                tags = product.tags if product.tags else "미정의 태그"
+                
+                return f"**제품명**: {product_name}\n" \
+                       f"**회사명**: {company}\n" \
+                       f"**카테고리**: {category}\n" \
+                       f"**태그**: {tags}\n" \
+                       f"**ID**: {product.id} | **플랫폼**: {product.platform} | **판매자**: {product.seller_id}"
+            
+            # 제품 리스트 뷰 생성
+            view = ProductListView(
+                products=products,
+                user_id=ctx.author.id,
+                title=f"'{search_term}' 검색 결과",
+                per_page=5,
+                custom_formatter=search_formatter
             )
             
-            # 최대 10개 제품 표시
-            for i, product in enumerate(products[:10], 1):
-                # 태그 정보
-                tag_info = f"카테고리: {product.category if product.category else '미입력'}"
-                if product.tags:
-                    tag_info += f" | 태그: {product.tags}"
-                
-                embed.add_field(
-                    name=f"{i}. {product.product_name if product.product_name else product.sale_name}",
-                    value=f"ID: {product.id} | 플랫폼: {product.platform} | 판매자: {product.seller_id}\n{tag_info}",
-                    inline=False
-                )
-            
-            # 추가 제품이 있는 경우 푸터 추가
-            if len(products) > 10:
-                embed.set_footer(text=f"외 {len(products) - 10}개 제품이 더 있습니다.")
-            
-            await ctx.send(embed=embed)
+            await ctx.send(embed=view.get_current_page_embed(), view=view)
             logger.info(f"'{search_term}' 검색 결과 표시됨 (총 {len(products)}개)")
             
         except Exception as e:
@@ -393,26 +386,27 @@ class ProductCommands(commands.Cog):
                 await ctx.send("제품 정보가 없습니다.")
                 return
             
-            # 임베드 생성
-            embed = discord.Embed(
-                title="최근 추가된 제품", 
-                color=discord.Color.blue(),
-                description=f"최근 추가된 {len(products)}개의 제품입니다."
-            )
-            
-            # 제품 정보 필드 추가
-            for i, product in enumerate(products, 1):
-                # 정보 포맷팅
+            # 커스텀 포매터 정의
+            def recent_formatter(product):
                 created_time = product.created_at.strftime("%Y-%m-%d %H:%M")
                 status = "✅ 완료" if product.category and product.tags and product.product_name and product.company else "⚠️ 미완성"
                 
-                embed.add_field(
-                    name=f"{i}. {product.sale_name}",
-                    value=f"ID: {product.id} | 플랫폼: {product.platform} | 등록일: {created_time}\n상태: {status}",
-                    inline=False
-                )
+                return f"**ID**: {product.id}\n" \
+                       f"**판매명**: {product.sale_name}\n" \
+                       f"**플랫폼**: {product.platform} | **판매자**: {product.seller_id}\n" \
+                       f"**등록일**: {created_time}\n" \
+                       f"**상태**: {status}"
             
-            await ctx.send(embed=embed)
+            # 제품 리스트 뷰 생성
+            view = ProductListView(
+                products=products,
+                user_id=ctx.author.id,
+                title="최근 추가된 제품",
+                per_page=5,
+                custom_formatter=recent_formatter
+            )
+            
+            await ctx.send(embed=view.get_current_page_embed(), view=view)
             logger.info(f"최근 추가된 제품 목록 표시됨 (총 {len(products)}개)")
             
         except Exception as e:

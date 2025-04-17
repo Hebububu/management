@@ -210,4 +210,12 @@ seller_id 로 prefix 입력받기..?
 
 # 250417
 
-음..
+네이버커머스 fetch test 
+네이버커머스 data sort (제조사가 미리 기입되어있어서 편했다.)
+
+- Cogs
+productcommands 에서 제품 목록 관련 views를 따로 분리해서 페이지네이션을 만들면 좋을 것 같다. 
+search_products랑 unfulfilled_products, recent_products 부분. 
+
+product_name이랑 company를 수기가 아니라 조금이라도 자동화할 수 있는 아이디어를 생각해야한당
+

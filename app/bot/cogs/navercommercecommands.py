@@ -18,3 +18,6 @@ class NaverCommerceCommands(commands.Cog):
         self.bot = bot
 
     # get_all_products_list -> insert into db 
+
+async def setup(bot):
+    await bot.add_cog(NaverCommerceCommands(bot))

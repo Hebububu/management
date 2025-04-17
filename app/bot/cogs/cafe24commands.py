@@ -23,7 +23,6 @@ class Cafe24Commands(commands.Cog):
         self.bot = bot
     
     # get all products -> insert into db (fetch_cafe24_products)
-    # 공통 임베드 만들어서 넣을거임.
     @commands.command(name='fetch_cafe24_products')
     @app_commands.choices(seller_id=[
         app_commands.Choice(name='샤슈컴퍼니', value='SIASIUCP'),
