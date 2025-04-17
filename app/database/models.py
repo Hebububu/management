@@ -1,4 +1,4 @@
-from sqlalchemy import ForeignKey, Column, Integer, TEXT, TIMESTAMP, JSON, BOOLEAN, FLOAT, ForeignKeyConstraint, UniqueConstraint
+from sqlalchemy import ForeignKey, Column, Integer, TEXT, TIMESTAMP, JSON, BOOLEAN, FLOAT, ForeignKeyConstraint, UniqueConstraint, BigInteger
 from sqlalchemy.orm import relationship
 from app.database.databasesetup import Base
 
@@ -11,7 +11,7 @@ class Product(Base):
     id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
     platform = Column(TEXT, nullable=False)
     seller_id = Column(TEXT, nullable=False)
-    product_id = Column(Integer, nullable=False)
+    product_id = Column(BigInteger, nullable=False)
     category = Column(TEXT, nullable=True) # 직접입력
     company = Column(TEXT, nullable=True) # 직접입력
     sale_name = Column(TEXT, nullable=False)
