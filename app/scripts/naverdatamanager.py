@@ -121,7 +121,7 @@ class NaverDataManager:
                 'sale_name': product['channelProducts'][0]['name'],
                 'product_name': None,
                 'tags': None,
-                'data': json.dumps(product, default=str, indent=4, ensure_ascii=False),
+                'data': product,
                 'created_at': datetime.datetime.utcnow(),
                 'updated_at': datetime.datetime.utcnow()
             }
