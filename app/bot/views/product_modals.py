@@ -15,7 +15,7 @@ class ProductNameModal(Modal):
         
         self.product_name_input = TextInput(
             label="제품명을 입력하세요",
-            placeholder="예: OB MTL 액상",
+            placeholder="예: {회사명} {제품명}",
             required=True,
             max_length=100
         )
@@ -48,7 +48,7 @@ class CompanyModal(Modal):
         
         self.company_input = TextInput(
             label="제조사를 입력하세요",
-            placeholder="예: OB유통",
+            placeholder="예: 긱베이프, 부푸 등",
             required=True,
             max_length=100
         )
@@ -81,7 +81,7 @@ class VolumeInputModal(Modal):
         
         self.volume_input = TextInput(
             label="용량을 입력하세요",
-            placeholder="예: 50ml",
+            placeholder="예: 30ml,60ml",
             required=True,
             max_length=20
         )
@@ -115,7 +115,7 @@ class NicotineInputModal(Modal):
         
         self.nicotine_input = TextInput(
             label="니코틴 함량을 입력하세요",
-            placeholder="예: 1.5mg",
+            placeholder="예: 3mg, 9mg",
             required=True,
             max_length=20
         )
@@ -149,7 +149,7 @@ class DeviceOptionsModal(Modal):
         
         self.options_input = TextInput(
             label="옵션을 입력하세요 (선택사항)",
-            placeholder="예: 200W, 온도조절 등",
+            placeholder="예: 색상 단일 코드 등",
             required=False,
             max_length=100
         )
@@ -184,7 +184,7 @@ class AtomizerDetailModal(Modal):
         
         self.detail_input = TextInput(
             label="세부 옵션을 입력하세요 (선택사항)",
-            placeholder="예: 직경 22mm, 싱글코일 등",
+            placeholder="기타 추가사항 옵션 등",
             required=False,
             max_length=100
         )
@@ -219,7 +219,7 @@ class CoilOptionsModal(Modal):
         
         self.options_input = TextInput(
             label="코일 옵션을 입력하세요 (선택사항)",
-            placeholder="예: 0.5옴, 클랩튼 등",
+            placeholder="예: 옴수 별개 옵션 등",
             required=False,
             max_length=100
         )

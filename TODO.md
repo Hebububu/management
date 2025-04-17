@@ -208,3 +208,6 @@ seller_id 로 prefix 입력받기..?
 - add_tags (product_name, tags, company, category)
     - 구현할거 생각해놓기
 
+# 250417
+
+음..
