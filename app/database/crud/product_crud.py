@@ -50,7 +50,7 @@ class ProductCRUD:
         except SQLAlchemyError as e:
             session.rollback()
             logger.error(f"제품 생성 중 오류 발생: {e}")
-            return None
+            raise e
         finally:
             session.close()
     

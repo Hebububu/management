@@ -90,7 +90,7 @@ class NaverDataManager:
 
             response = requests.request('GET',url,headers=headers,data=payload)
             response.raise_for_status()
-            data = response.json()
+            data = response.text
 
             product_data.append(data)
 
