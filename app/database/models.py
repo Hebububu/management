@@ -12,11 +12,11 @@ class Product(Base):
     platform = Column(TEXT, nullable=False)
     seller_id = Column(TEXT, nullable=False)
     product_id = Column(Integer, nullable=False)
-    category = Column(TEXT, nullable=True)
-    company = Column(TEXT, nullable=True)
+    category = Column(TEXT, nullable=True) # 직접입력
+    company = Column(TEXT, nullable=True) # 직접입력
     sale_name = Column(TEXT, nullable=False)
-    product_name = Column(TEXT, nullable=True)
-    tags = Column(TEXT, nullable=True)
+    product_name = Column(TEXT, nullable=True) # 직접입력
+    tags = Column(TEXT, nullable=True) # 직접입력 
     data = Column(JSON, nullable=False)
     created_at = Column(TIMESTAMP(timezone=True), nullable=False)
     updated_at = Column(TIMESTAMP(timezone=True), nullable=False)

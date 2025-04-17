@@ -21,3 +21,6 @@
 # 토큰 파일
 /richcp_tokens.json
 /siasiucp_tokens.json
+
+# 테스트 파일
+/navercommerce_fetch_test.json
