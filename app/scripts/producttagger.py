@@ -10,7 +10,16 @@ class ProductTagger:
     """
     제품 자동 태깅 시스템 클래스입니다.
 
+    플랫폼별로 sale_name이 다르더라도, 이를 통합하여 관리하기 위해서 category와 tags를 통합하여 분류하고 구분짓는 것.
+    이것이 ProductTagger 클래스의 존재 의의입니다.
+
     product_name = '회사명'|'제품명'
+
+    *** product_name***은 아주 중요합니다.
+    모든 플랫폼에서 같은 상품인 경우 어떠한 경우더라도 product_name은 같아야 합니다.
+    product_name을 통일함으로써 출고 데이터 및 판매 데이터 수집 및 분석을 하기 위해서입니다.
+
+
     company = '회사명'
     category = '카테고리'
     tags = '소분류'|'소분류 하위 소분류'|'옵션명'(선택사항)
@@ -109,6 +118,7 @@ class ProductTagger:
         Returns:
             추출된 회사명
         """
+
         # 이미 company가 data에 있는 경우 우선 사용
         if data and isinstance(data, dict) and 'company' in data:
             return data['company']

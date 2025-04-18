@@ -31,7 +31,7 @@ def test_extract_company():
     # 현재 시간
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
-    print(f"===== extract_company 메서드 테스트 시작 ({now}) =====")
+    logger.info(f"===== extract_company 메서드 테스트 시작 ({now}) =====")
     
     # 최근 제품 100개 가져오기 (또는 더 적은 수의 모든 제품)
     products = product_crud.get_recent_products(100)
@@ -42,8 +42,8 @@ def test_extract_company():
     else:
         test_products = products
     
-    print(f"테스트할 제품 수: {len(test_products)}")
-    print("-" * 80)
+    logger.info(f"테스트할 제품 수: {len(test_products)}")
+    logger.info("-" * 80)
     
     # 결과 저장
     results = []
@@ -77,31 +77,31 @@ def test_extract_company():
                     success_count += 1
             
             # 결과 출력
-            print(f"{idx}. 제품 ID: {product.id}")
-            print(f"   플랫폼: {platform}")
-            print(f"   판매명: {sale_name}")
-            print(f"   추출된 회사명: {extracted_company}")
+            logger.info(f"{idx}. 제품 ID: {product.id}")
+            logger.info(f"   플랫폼: {platform}")
+            logger.info(f"   판매명: {sale_name}")
+            logger.info(f"   추출된 회사명: {extracted_company}")
             if product.company:
-                print(f"   기존 회사명: {product.company}")
+                logger.info(f"   기존 회사명: {product.company}")
                 if extracted_company != product.company:
-                    print(f"   [주의] 추출된 회사명이 기존 회사명과 다릅니다!")
+                    logger.info(f"   [주의] 추출된 회사명이 기존 회사명과 다릅니다!")
             else:
-                print(f"   기존 회사명: (없음)")
-            print("-" * 80)
+                logger.info(f"   기존 회사명: (없음)")
+            logger.info("-" * 80)
             
         except Exception as e:
-            print(f"{idx}. 제품 ID: {product.id}")
-            print(f"   오류 발생: {str(e)}")
-            print("-" * 80)
+            logger.info(f"{idx}. 제품 ID: {product.id}")
+            logger.info(f"   오류 발생: {str(e)}")
+            logger.info("-" * 80)
     
     # 성공률 계산
     success_rate = (success_count / total_with_company) * 100 if total_with_company > 0 else 0
     
-    print(f"테스트 결과 요약:")
-    print(f"- 총 테스트 제품 수: {len(test_products)}")
-    print(f"- 기존 회사명이 있는 제품 수: {total_with_company}")
-    print(f"- 기존 회사명과 일치한 제품 수: {success_count}")
-    print(f"- 성공률: {success_rate:.2f}%")
+    logger.info(f"테스트 결과 요약:")
+    logger.info(f"- 총 테스트 제품 수: {len(test_products)}")
+    logger.info(f"- 기존 회사명이 있는 제품 수: {total_with_company}")
+    logger.info(f"- 기존 회사명과 일치한 제품 수: {success_count}")
+    logger.info(f"- 성공률: {success_rate:.2f}%")
     
     # 결과를 JSON 파일로 저장 (app/tests/results 디렉토리 생성)
     results_dir = "app/tests/results"
@@ -111,8 +111,8 @@ def test_extract_company():
     with open(result_file, 'w', encoding='utf-8') as f:
         json.dump(results, f, ensure_ascii=False, indent=2)
     
-    print(f"상세 결과가 다음 파일에 저장되었습니다: {result_file}")
-    print(f"===== extract_company 메서드 테스트 종료 =====")
+    logger.info(f"상세 결과가 다음 파일에 저장되었습니다: {result_file}")
+    logger.info(f"===== extract_company 메서드 테스트 종료 =====")
 
 def analyze_failures():
     """
@@ -121,13 +121,13 @@ def analyze_failures():
     # 결과 디렉토리 확인
     results_dir = "app/tests/results"
     if not os.path.exists(results_dir):
-        print("분석할 결과 파일이 없습니다.")
+        logger.info("분석할 결과 파일이 없습니다.")
         return
     
     # 가장 최근 결과 파일 찾기
     result_files = [f for f in os.listdir(results_dir) if f.startswith("extract_company_results_")]
     if not result_files:
-        print("분석할 결과 파일이 없습니다.")
+        logger.info("분석할 결과 파일이 없습니다.")
         return
     
     latest_file = max(result_files, key=lambda x: os.path.getmtime(os.path.join(results_dir, x)))
@@ -142,17 +142,17 @@ def analyze_failures():
         failures = [r for r in results if r["existing_company"] and r["extracted_company"] != r["existing_company"]]
         
         if not failures:
-            print("모든 테스트가 성공했습니다!")
+            logger.info("모든 테스트가 성공했습니다!")
             return
         
-        print(f"===== 실패 사례 분석 ({len(failures)}건) =====")
+        logger.info(f"===== 실패 사례 분석 ({len(failures)}건) =====")
         for idx, failure in enumerate(failures, 1):
-            print(f"{idx}. 제품 ID: {failure['product_id']}")
-            print(f"   플랫폼: {failure['platform']}")
-            print(f"   판매명: {failure['sale_name']}")
-            print(f"   추출된 회사명: {failure['extracted_company']}")
-            print(f"   기존 회사명: {failure['existing_company']}")
-            print("-" * 80)
+            logger.info(f"{idx}. 제품 ID: {failure['product_id']}")
+            logger.info(f"   플랫폼: {failure['platform']}")
+            logger.info(f"   판매명: {failure['sale_name']}")
+            logger.info(f"   추출된 회사명: {failure['extracted_company']}")
+            logger.info(f"   기존 회사명: {failure['existing_company']}")
+            logger.info("-" * 80)
         
         # 플랫폼별 실패율
         platform_stats = {}
@@ -165,18 +165,18 @@ def analyze_failures():
                 if r["extracted_company"] != r["existing_company"]:
                     platform_stats[platform]["failures"] += 1
         
-        print("플랫폼별 실패율:")
+        logger.info("플랫폼별 실패율:")
         for platform, stats in platform_stats.items():
             failure_rate = (stats["failures"] / stats["total"]) * 100 if stats["total"] > 0 else 0
-            print(f"- {platform}: {failure_rate:.2f}% ({stats['failures']}/{stats['total']})")
+            logger.info(f"- {platform}: {failure_rate:.2f}% ({stats['failures']}/{stats['total']})")
     
     except Exception as e:
-        print(f"결과 분석 중 오류 발생: {str(e)}")
+        logger.error(f"결과 분석 중 오류 발생: {str(e)}")
 
 if __name__ == "__main__":
     # 회사명 추출 테스트 실행
     test_extract_company()
     
     # 실패 사례 분석 (옵션)
-    print("\n")
+    logger.info("\n")
     analyze_failures()
