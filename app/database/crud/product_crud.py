@@ -74,16 +74,16 @@ class ProductCRUD:
         finally:
             session.close()
     
-    def update_product_tags(self, product_id, category, tags, company, product_name):
+    def update_product_tags(self, product_id, company=None, category=None, tags=None, product_name=None):
         """
         제품의 태그, 카테고리, 제조사, 제품명 정보를 업데이트합니다.
         
         Args:
             product_id (int): 업데이트할 제품 ID
-            category (str): 제품 카테고리
-            tags (str): 제품 태그 정보
-            company (str): 제조사 이름
-            product_name (str): 관리제품명
+            company (str, optional): 제조사 이름
+            category (str, optional): 제품 카테고리
+            tags (str, optional): 제품 태그 정보
+            product_name (str, optional): 관리제품명
             
         Returns:
             bool: 업데이트 성공 여부
@@ -96,11 +96,16 @@ class ProductCRUD:
                 logger.warning(f"제품 ID {product_id} 찾을 수 없음")
                 return False
             
-            # 데이터 업데이트
-            product.category = category
-            product.tags = tags
-            product.company = company
-            product.product_name = product_name
+            # 데이터 업데이트 (None이 아닌 값만)
+            if company is not None:
+                product.company = company
+            if category is not None:
+                product.category = category
+            if tags is not None:
+                product.tags = tags
+            if product_name is not None:
+                product.product_name = product_name
+                
             product.updated_at = datetime.datetime.utcnow()
             
             session.commit()
@@ -114,12 +119,68 @@ class ProductCRUD:
         finally:
             session.close()
     
-    def get_unfulfilled_products(self, seller_id=None):
+    def get_tagged_products(self, limit=200):
+        """
+        태그가 완전히 입력된 제품 목록을 반환합니다.
+        
+        Args:
+            limit (int, optional): 반환할 최대 제품 수. 기본값은 200.
+            
+        Returns:
+            list: 태깅된 제품 목록
+        """
+        session = self.db.get_session()
+        try:
+            # 태깅 완료 제품 조건 (모든 필수 태그가 있는 경우)
+            query = session.query(Product).filter(
+                and_(
+                    Product.tags != None,
+                    Product.category != None,
+                    Product.product_name != None,
+                    Product.company != None,
+                    Product.tags != '',
+                    Product.category != '',
+                    Product.product_name != '',
+                    Product.company != ''
+                )
+            )
+            
+            # 결과 정렬 (최근 업데이트 순) 및 제한
+            products = query.order_by(Product.updated_at.desc()).limit(limit).all()
+            
+            # 결과를 딕셔너리 목록으로 변환
+            product_list = []
+            for product in products:
+                product_dict = {
+                    'id': product.id,
+                    'sale_name': product.sale_name,
+                    'platform': product.platform,
+                    'seller_id': product.seller_id,
+                    'category': product.category,
+                    'tags': product.tags,
+                    'company': product.company,
+                    'product_name': product.product_name,
+                    'data': product.data,
+                    'created_at': product.created_at,
+                    'updated_at': product.updated_at
+                }
+                product_list.append(product_dict)
+                
+            return product_list
+            
+        except SQLAlchemyError as e:
+            logger.error(f"태깅된 제품 조회 중 오류 발생: {e}")
+            return []
+        finally:
+            session.close()
+    
+    def get_untagged_products(self, seller_id=None, limit=100):
         """
         태그가 미입력된 제품 목록을 반환합니다.
         
         Args:
             seller_id (str, optional): 판매자 ID로 필터링. 기본값은 None (모든 판매자).
+            limit (int, optional): 반환할 최대 제품 수. 기본값은 100.
             
         Returns:
             list: 미완성 제품 목록
@@ -141,8 +202,27 @@ class ProductCRUD:
                 query = query.filter(Product.seller_id == seller_id)
             
             # 결과 정렬 (최근 추가된 순)
-            products = query.order_by(Product.created_at.desc()).all()
-            return products
+            products = query.order_by(Product.created_at.desc()).limit(limit).all()
+            
+            # 결과를 딕셔너리 목록으로 변환
+            product_list = []
+            for product in products:
+                product_dict = {
+                    'id': product.id,
+                    'sale_name': product.sale_name,
+                    'platform': product.platform,
+                    'seller_id': product.seller_id,
+                    'category': product.category,
+                    'tags': product.tags,
+                    'company': product.company,
+                    'product_name': product.product_name,
+                    'data': product.data,
+                    'created_at': product.created_at,
+                    'updated_at': product.updated_at
+                }
+                product_list.append(product_dict)
+                
+            return product_list
             
         except SQLAlchemyError as e:
             logger.error(f"미완성 제품 조회 중 오류 발생: {e}")
@@ -279,3 +359,32 @@ class ProductCRUD:
             return []
         finally:
             session.close()
+    
+    def save_feedback(self, feedback_data):
+        """
+        사용자 피드백을 저장합니다.
+        
+        Args:
+            feedback_data (dict): 저장할 피드백 데이터
+            
+        Returns:
+            bool: 저장 성공 여부
+        """
+        # 피드백 저장 로직 구현
+        # 여기서는 로그에만 기록하지만, 필요에 따라 데이터베이스 저장 로직 추가 가능
+        logger.info(f"피드백 저장: 제품 ID {feedback_data.get('product_id')}, 사용자 ID {feedback_data.get('user_id')}")
+        return True
+    
+    def get_feedback(self, query=None):
+        """
+        저장된 피드백을 조회합니다.
+        
+        Args:
+            query (dict, optional): 조회 조건
+            
+        Returns:
+            list: 피드백 데이터 목록
+        """
+        # 피드백 조회 로직 구현
+        # 여기서는 빈 리스트를 반환하지만, 필요에 따라 데이터베이스 조회 로직 추가 가능
+        return []
