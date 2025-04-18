@@ -22,5 +22,10 @@
 /richcp_tokens.json
 /siasiucp_tokens.json
 
-# 테스트 파일
+# 테스트 결과 파일
+/app/tests/results
 /navercommerce_fetch_test.json
+
+# 사용자 사전 파일(kiwipiepy 사용)
+/data/etc/user_dict.txt
+
